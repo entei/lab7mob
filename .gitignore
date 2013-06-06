@@ -1,0 +1,10 @@
+#Filtering compilation products & other junk
+*~
+*.o
+*.ko
+*.mod.*
+*.symvers
+*.order
+*.bsu
+*.work
+
