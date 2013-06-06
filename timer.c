@@ -73,7 +73,7 @@ static ssize_t file_store(PKOBJECT kobj, PKOBJ_ATTRIBUTE attr, const char *buf, 
 	}
 	if (cache > MIN_TIMER) {
 		atomic_set(&tact, cache);
-		printk(KERN_INFO MODULE_PREFIX "Timer period set to %d ms\n", cache);
+		printk(KERN_INFO MODULE_PREFIX "Timer period set to : %d ms\n", cache);
 	} else {
 		printk(KERN_ERR MODULE_PREFIX "%d value is invalid.\n", cache);
 	}
@@ -86,8 +86,9 @@ static int __init timer_init(void)
 	int ret, start = atomic_read(&tact);
 	printk(KERN_INFO MODULE_PREFIX "Timer module installed.\n");
 	printk(KERN_INFO MODULE_PREFIX "Timer period can be set and seen in \"/sys/kernel/sostimer/period\"");
+	//Timer install setup
 	setup_timer(&sos_timer, sos_timer_callback, 0);
-	printk(KERN_INFO MODULE_PREFIX "Starting timer with %d ms period\n", start);
+	printk(KERN_INFO MODULE_PREFIX "Starting timer with : %d ms period\n", start);
 	ret = mod_timer(&sos_timer, jiffies + msecs_to_jiffies(start));
 	if (ret) {
 		printk(KERN_INFO MODULE_PREFIX "Error when setting up timer.\n");
