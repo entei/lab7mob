@@ -5,10 +5,14 @@
 #include <linux/timer.h>
 #include <linux/init.h>
 
-/* Default timer tact period */
+/*
+* Default timer tact period
+*/
 atomic_t tact = ATOMIC_INIT(5000);
 
-/* Timer structure */
+/* 
+* List of timer
+*/
 static struct timer_list sos_timer;
 
 static struct kobject * kobj;
@@ -39,12 +43,14 @@ void sos_timer_callback(unsigned long data)
 {
 	int c = atomic_read(&tact);
 	if (c != -1) {
-		printk(KERN_INFO " ---> SOS <--- | Next will be in %d msec\n", c);
+		printk(KERN_INFO " -- SOS-- | Next will be in %d msec\n", c);
 		mod_timer(&sos_timer, jiffies + msecs_to_jiffies(c));
 	}
 }
 
-/* Shows the current timer frequency in milliseconds. */
+/*
+* Shows the current timer frequency in milliseconds.
+*/
 static ssize_t file_show(struct kobject *kobj, struct kobj_attribute *attr, char *buf)
 {
 	return sprintf(buf, "Timer frequency is %d msecs now.\n", atomic_read(&tact));
@@ -67,7 +73,9 @@ static ssize_t file_store(struct kobject *kobj, struct kobj_attribute *attr, con
 	return count;
 }
 
-/**/
+/*
+* Timer initialize
+*/
 static int __init timer_init(void)
 {
 	int ret, start = atomic_read(&tact);
@@ -98,7 +106,7 @@ static void __exit timer_exit(void)
 	atomic_set(&tact, -1);
 	ret = del_timer(&sos_timer);
 	if (ret) {
-		printk(KERN_ERR "Timer is still in use.\n");
+		printk(KERN_ERR "Timer still in use.\n");
 	}
 	kobject_put(kobj);
 	printk(KERN_INFO "Timer module was successfully uninstalled.\n");
